@@ -1,4 +1,5 @@
 ﻿using Cofoundry.Core.BackgroundTasks;
+using Cofoundry.Core.Configuration;
 using Cofoundry.Core.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,7 @@ namespace Cofoundry.Plugins.BackgroundTasks.Hangfire
                 .RegisterType<IHangfireBackgroundTaskInitializer, HangfireBackgroundTaskInitializer>()
                 .RegisterType<IHangfireServerInitializer, HangfireServerInitializer>()
                 .RegisterType<IBackgroundTaskScheduler, HangfireBackgroundTaskScheduler>()
+                .RegisterFactory<HangfireSettings, ConfigurationSettingsFactory<HangfireSettings>>()
                 ;
         }
     }
