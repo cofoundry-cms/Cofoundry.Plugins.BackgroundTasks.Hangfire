@@ -30,7 +30,10 @@ namespace Cofoundry.Plugins.BackgroundTasks.Hangfire
 
             // Bit of a hack here to wrap injectable tasks because
             // hangire doesn't support child contexts.
-            if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(InjectableTaskWrapper<>))
+            if (type.IsGenericType 
+                && (type.GetGenericTypeDefinition() == typeof(InjectableTaskWrapper<>)
+                 || type.GetGenericTypeDefinition() == typeof(InjectableAsyncTaskWrapper<>))
+                )
             {
                 job = Activator.CreateInstance(type, _resolutionContext);
             }
