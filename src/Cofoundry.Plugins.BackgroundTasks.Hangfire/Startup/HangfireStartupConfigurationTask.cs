@@ -1,15 +1,8 @@
-﻿using Owin;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using Cofoundry.Core.AutoMapper;
 using Cofoundry.Web;
-using Cofoundry.Core.AutoUpdate;
-using Hangfire;
-using Hangfire.Dashboard;
-using Hangfire.SqlServer;
-using Cofoundry.Domain.Data;
+using Microsoft.AspNetCore.Builder;
 
 namespace Cofoundry.Plugins.BackgroundTasks.Hangfire
 {
@@ -20,12 +13,12 @@ namespace Cofoundry.Plugins.BackgroundTasks.Hangfire
     /// To customize the startup process you can override IHangfireBackgroundTaskInitializer
     /// and IHangfireServerInitializer implementations, or just create your own plugin.
     /// </remarks>
-    public class HangfireInitializationStartupTask : IStartupTask
+    public class HangfireStartupConfigurationTask : IRunBeforeStartupConfigurationTask
     {
         private readonly IHangfireBackgroundTaskInitializer _hangfireBackgroundTaskInitializer;
         private readonly IHangfireServerInitializer _hangfireServerInitializer;
-        
-        public HangfireInitializationStartupTask(
+
+        public HangfireStartupConfigurationTask(
             IHangfireBackgroundTaskInitializer hangfireBackgroundTaskInitializer,
             IHangfireServerInitializer hangfireServerInitializer
             )
@@ -39,7 +32,9 @@ namespace Cofoundry.Plugins.BackgroundTasks.Hangfire
             get { return (int)StartupTaskOrdering.Normal; }
         }
 
-        public void Run(IAppBuilder app)
+        public Type[] RunBefore { get; } = new Type[] { typeof(MvcStartupConfigurationTask) };
+
+        public void Configure(IApplicationBuilder app)
         {
             _hangfireServerInitializer.Initialize(app);
             _hangfireBackgroundTaskInitializer.Initialize();

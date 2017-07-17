@@ -1,13 +1,8 @@
-﻿using Owin;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Hangfire;
-using Hangfire.Logging;
-using Cofoundry.Core.BackgroundTasks;
-using Cofoundry.Core.DependencyInjection;
 
 namespace Cofoundry.Plugins.BackgroundTasks.Hangfire
 {

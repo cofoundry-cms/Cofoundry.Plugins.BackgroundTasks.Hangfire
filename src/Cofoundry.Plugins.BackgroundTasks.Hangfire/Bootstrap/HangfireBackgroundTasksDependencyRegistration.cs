@@ -17,7 +17,6 @@ namespace Cofoundry.Plugins.BackgroundTasks.Hangfire
                 .RegisterType<IHangfireBackgroundTaskInitializer, HangfireBackgroundTaskInitializer>()
                 .RegisterType<IHangfireServerInitializer, HangfireServerInitializer>()
                 .RegisterType<IBackgroundTaskScheduler, HangfireBackgroundTaskScheduler>()
-                .RegisterFactory<HangfireSettings, ConfigurationSettingsFactory<HangfireSettings>>()
                 ;
         }
     }

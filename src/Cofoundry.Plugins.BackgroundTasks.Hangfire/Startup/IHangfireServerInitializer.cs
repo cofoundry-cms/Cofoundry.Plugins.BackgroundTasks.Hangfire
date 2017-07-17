@@ -1,4 +1,4 @@
-﻿using Owin;
+﻿using Microsoft.AspNetCore.Builder;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +13,6 @@ namespace Cofoundry.Plugins.BackgroundTasks.Hangfire
     /// </summary>
     public interface IHangfireServerInitializer
     {
-        void Initialize(IAppBuilder app);
+        void Initialize(IApplicationBuilder app);
     }
 }

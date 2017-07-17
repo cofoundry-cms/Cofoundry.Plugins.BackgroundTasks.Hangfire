@@ -16,7 +16,7 @@ namespace Cofoundry.Plugins.BackgroundTasks.Hangfire
         /// Prevents the HangFire server being configuted and started. Defaults
         /// to false.
         /// </summary>
-        public bool DisableHangfire { get; set; }
+        public bool Disabled { get; set; }
 
         /// <summary>
         /// Enables the HangFire dashboard for Cofoundry admin users 

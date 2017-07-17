@@ -85,12 +85,12 @@ namespace Cofoundry.Plugins.BackgroundTasks.Hangfire
 
         private void RegisterRecurringTask<TTask>(string cronExpression) where TTask : IRecurringBackgroundTask
         {
-            RecurringJob.AddOrUpdate<InjectableTaskWrapper<TTask>>(GetJobId<TTask>(), t => t.Execute(), cronExpression);
+            RecurringJob.AddOrUpdate<TTask>(GetJobId<TTask>(), t => t.Execute(), cronExpression);
         }
 
         private void RegisterAsyncRecurringTask<TTask>(string cronExpression) where TTask : IAsyncRecurringBackgroundTask
         {
-            RecurringJob.AddOrUpdate<InjectableAsyncTaskWrapper<TTask>>(GetJobId<TTask>(), t => t.ExecuteAsync(), cronExpression);
+            RecurringJob.AddOrUpdate<TTask>(GetJobId<TTask>(), t => t.ExecuteAsync(), cronExpression);
         }
         
         #endregion

@@ -1,12 +1,6 @@
-﻿using Cofoundry.Core;
-using Cofoundry.Core.AutoUpdate;
-using Cofoundry.Core.DependencyInjection;
-using Cofoundry.Domain.Data;
-using Cofoundry.Web;
-using Hangfire;
+﻿using Hangfire;
 using Hangfire.Dashboard;
-using Hangfire.SqlServer;
-using Owin;
+using Microsoft.AspNetCore.Builder;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,33 +16,20 @@ namespace Cofoundry.Plugins.BackgroundTasks.Hangfire
     public class HangfireServerInitializer : IHangfireServerInitializer
     {
         private readonly HangfireSettings _hangfireSettings;
-        private readonly IAutoUpdateService _autoUpdateService;
 
         public HangfireServerInitializer(
-            HangfireSettings hangfireSettings,
-            IAutoUpdateService autoUpdateService
+            HangfireSettings hangfireSettings
             )
         {
             _hangfireSettings = hangfireSettings;
-            _autoUpdateService = autoUpdateService;
         }
 
-        public void Initialize(IAppBuilder app)
+        public void Initialize(IApplicationBuilder app)
         {
             // Allow hangfire to be disabled, e.g. when connecting from dev to a production db.
-            if (_hangfireSettings.DisableHangfire) return;
+            if (_hangfireSettings.Disabled) return;
 
-            // Register background tasks using the root context, since the task scheduler
-            // needs the root context to create its own child contexts.
-            var resolutionContext = IckyDependencyResolution.ResolveFromRootContext<IResolutionContext>();
-            JobActivator.Current = new ContainerJobActivator(resolutionContext);
-
-            var isDbLocked = _autoUpdateService.IsLocked();
-
-            GlobalConfiguration.Configuration.UseSqlServerStorage(DbConstants.ConnectionStringName, new SqlServerStorageOptions()
-            {
-                PrepareSchemaIfNecessary = !isDbLocked
-            });
+            app.UseHangfireServer();
 
             if (_hangfireSettings.EnableHangfireDashboard)
             {
@@ -58,8 +39,6 @@ namespace Cofoundry.Plugins.BackgroundTasks.Hangfire
                     AppPath = "/admin"
                 });
             }
-
-            app.UseHangfireServer();
         }
     }
 }

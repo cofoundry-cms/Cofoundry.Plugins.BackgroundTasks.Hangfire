@@ -1,13 +1,9 @@
-﻿    using Owin;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Hangfire;
-using Hangfire.Logging;
 using Cofoundry.Core.BackgroundTasks;
-using Cofoundry.Core.DependencyInjection;
 
 namespace Cofoundry.Plugins.BackgroundTasks.Hangfire
 {
@@ -19,12 +15,12 @@ namespace Cofoundry.Plugins.BackgroundTasks.Hangfire
         #region constructor
 
         private readonly HangfireSettings _hangfireSettings;
-        private readonly IBackgroundTaskRegistration[] _backgroundTaskRegistrations;
+        private readonly IEnumerable<IBackgroundTaskRegistration> _backgroundTaskRegistrations;
         private readonly IBackgroundTaskScheduler _backgroundTaskScheduler;
 
         public HangfireBackgroundTaskInitializer(
             HangfireSettings hangfireSettings,
-            IBackgroundTaskRegistration[] backgroundTaskRegistrations,
+            IEnumerable<IBackgroundTaskRegistration> backgroundTaskRegistrations,
             IBackgroundTaskScheduler backgroundTaskScheduler
             )
         {
@@ -39,7 +35,7 @@ namespace Cofoundry.Plugins.BackgroundTasks.Hangfire
 
         public void Initialize()
         {
-            if (_hangfireSettings.DisableHangfire) return;
+            if (_hangfireSettings.Disabled) return;
 
             foreach (var registration in _backgroundTaskRegistrations)
             {

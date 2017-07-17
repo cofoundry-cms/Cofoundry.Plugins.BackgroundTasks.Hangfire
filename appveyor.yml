@@ -1,5 +1,5 @@
 version: '{build}'
-image: Visual Studio 2015
+image: Visual Studio 2017
 environment:
   NUGET_API_KEY:
     secure: KBgtBksw79Z4kFehSqUePYoknzeWB8Tq8eAzSFPxDysRJCjJT3iUiCzk7OweTp0K

@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Hangfire.Dashboard;
 using Hangfire.Annotations;
 using Cofoundry.Domain;
-using Cofoundry.Web;
 
 namespace Cofoundry.Plugins.BackgroundTasks.Hangfire
 {
@@ -13,8 +12,14 @@ namespace Cofoundry.Plugins.BackgroundTasks.Hangfire
     {
         public bool Authorize([NotNull] DashboardContext context)
         {
-            var service = IckyDependencyResolution.ResolveFromMvcContext<IUserContextService>();
-            var userContext = service.GetCurrentContext();
+            var service = (IUserContextService)context.GetHttpContext().RequestServices.GetService(typeof(IUserContextService));
+            
+            // Hangfire does not support async auth:
+            // https://github.com/HangfireIO/Hangfire/issues/827
+            var userContext = service
+                .GetCurrentContextAsync()
+                .ConfigureAwait(false).GetAwaiter().GetResult();
+
             return userContext.IsCofoundryUser();
         }
     }
