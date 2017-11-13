@@ -17,7 +17,7 @@ namespace Cofoundry.Plugins.BackgroundTasks.Hangfire
             // Hangfire does not support async auth:
             // https://github.com/HangfireIO/Hangfire/issues/827
             var userContext = service
-                .GetCurrentContextAsync()
+                .GetCurrentContextByUserAreaAsync(CofoundryAdminUserArea.AreaCode)
                 .ConfigureAwait(false).GetAwaiter().GetResult();
 
             return userContext.IsCofoundryUser();

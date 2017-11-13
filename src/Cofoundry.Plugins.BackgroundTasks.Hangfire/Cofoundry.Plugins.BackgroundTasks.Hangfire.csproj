@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard1.6</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
 
     <PackageId>Cofoundry.Plugins.BackgroundTasks.Hangfire</PackageId>
     <Description>Hangfire implementation of Cofoundry.Core.BackgroundTasks.</Description>
@@ -15,7 +15,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Cofoundry.Web" Version="0.2.0-beta0004" />
-    <PackageReference Include="Hangfire" Version="1.6.14" />
+    <PackageReference Include="Cofoundry.Web" Version="0.2.0-beta0056" />
+    <PackageReference Include="Hangfire" Version="1.6.17" />
   </ItemGroup>
 </Project>
