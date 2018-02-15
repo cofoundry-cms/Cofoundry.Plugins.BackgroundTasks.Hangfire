@@ -32,7 +32,7 @@ namespace Cofoundry.Plugins.BackgroundTasks.Hangfire
             get { return (int)StartupTaskOrdering.Normal; }
         }
 
-        public Type[] RunBefore { get; } = new Type[] { typeof(MvcStartupConfigurationTask) };
+        public ICollection<Type> RunBefore { get; } = new Type[] { typeof(MvcStartupConfigurationTask) };
 
         public void Configure(IApplicationBuilder app)
         {

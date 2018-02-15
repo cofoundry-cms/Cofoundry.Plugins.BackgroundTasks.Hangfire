@@ -14,9 +14,9 @@ namespace Cofoundry.Plugins.BackgroundTasks.Hangfire
         public void Register(IContainerRegister container)
         {
             container
-                .RegisterType<IHangfireBackgroundTaskInitializer, HangfireBackgroundTaskInitializer>()
-                .RegisterType<IHangfireServerInitializer, HangfireServerInitializer>()
-                .RegisterType<IBackgroundTaskScheduler, HangfireBackgroundTaskScheduler>()
+                .Register<IHangfireBackgroundTaskInitializer, HangfireBackgroundTaskInitializer>()
+                .Register<IHangfireServerInitializer, HangfireServerInitializer>()
+                .Register<IBackgroundTaskScheduler, HangfireBackgroundTaskScheduler>()
                 ;
         }
     }
