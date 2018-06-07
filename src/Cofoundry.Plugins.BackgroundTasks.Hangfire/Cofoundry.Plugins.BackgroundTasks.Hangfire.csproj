@@ -15,7 +15,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Cofoundry.Web" Version="0.3.0" />
+    <PackageReference Include="Cofoundry.Web" Version="0.3.2" />
     <PackageReference Include="Hangfire" Version="1.6.19" />
   </ItemGroup>
 </Project>
