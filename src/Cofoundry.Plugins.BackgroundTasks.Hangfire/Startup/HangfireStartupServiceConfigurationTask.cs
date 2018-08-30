@@ -31,7 +31,8 @@ namespace Cofoundry.Plugins.BackgroundTasks.Hangfire
 
         public void ConfigureServices(IMvcBuilder mvcBuilder)
         {
-            var isDbLocked = _autoUpdateService.IsLocked();
+            // We have to block here as service configuration is not async.
+            var isDbLocked = _autoUpdateService.IsLockedAsync().GetAwaiter().GetResult();
             var connectionString = _databaseSettings.ConnectionString;
 
             mvcBuilder
