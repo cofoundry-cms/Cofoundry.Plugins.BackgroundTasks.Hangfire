@@ -1,4 +1,6 @@
-﻿using Hangfire;
+﻿using Cofoundry.Core;
+using Cofoundry.Domain;
+using Hangfire;
 using Hangfire.Dashboard;
 using Microsoft.AspNetCore.Builder;
 using System;
@@ -16,12 +18,15 @@ namespace Cofoundry.Plugins.BackgroundTasks.Hangfire
     public class HangfireServerInitializer : IHangfireServerInitializer
     {
         private readonly HangfireSettings _hangfireSettings;
+        private readonly AdminSettings _adminSettings;
 
         public HangfireServerInitializer(
-            HangfireSettings hangfireSettings
+            HangfireSettings hangfireSettings,
+            AdminSettings adminSettings
             )
         {
             _hangfireSettings = hangfireSettings;
+            _adminSettings = adminSettings;
         }
 
         public void Initialize(IApplicationBuilder app)
@@ -31,12 +36,13 @@ namespace Cofoundry.Plugins.BackgroundTasks.Hangfire
 
             app.UseHangfireServer();
 
-            if (_hangfireSettings.EnableHangfireDashboard)
+            if (_hangfireSettings.EnableHangfireDashboard && !_adminSettings.Disabled)
             {
-                app.UseHangfireDashboard("/admin/hangfire", new DashboardOptions
+                var adminPath = FilePathHelper.CombineVirtualPath(_adminSettings.DirectoryName, "hangfire");
+                app.UseHangfireDashboard(adminPath, new DashboardOptions
                 {
                     Authorization = new IDashboardAuthorizationFilter[] { new HangfireDashboardAuthorizationFilter() },
-                    AppPath = "/admin"
+                    AppPath = "/" + _adminSettings.DirectoryName
                 });
             }
         }
