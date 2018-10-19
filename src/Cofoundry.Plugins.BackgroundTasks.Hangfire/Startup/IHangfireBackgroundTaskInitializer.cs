@@ -12,10 +12,6 @@ namespace Cofoundry.Plugins.BackgroundTasks.Hangfire
     /// </summary>
     public interface IHangfireBackgroundTaskInitializer
     {
-        #region public methods
-
         void Initialize();
-
-        #endregion
     }
 }

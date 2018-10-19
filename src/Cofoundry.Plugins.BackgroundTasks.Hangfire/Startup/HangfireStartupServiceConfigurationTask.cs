@@ -40,7 +40,7 @@ namespace Cofoundry.Plugins.BackgroundTasks.Hangfire
                 .AddHangfire(configuration => configuration
                     .UseSqlServerStorage(connectionString, new SqlServerStorageOptions()
                     {
-                        PrepareSchemaIfNecessary = isDbLocked
+                        PrepareSchemaIfNecessary = !isDbLocked
                     })
                     .UseFilter(new AutomaticRetryAttribute { Attempts = 0 })
                     );

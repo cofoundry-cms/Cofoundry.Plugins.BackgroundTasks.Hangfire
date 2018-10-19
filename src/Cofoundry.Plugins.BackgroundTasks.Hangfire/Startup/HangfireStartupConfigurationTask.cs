@@ -13,7 +13,9 @@ namespace Cofoundry.Plugins.BackgroundTasks.Hangfire
     /// To customize the startup process you can override IHangfireBackgroundTaskInitializer
     /// and IHangfireServerInitializer implementations, or just create your own plugin.
     /// </remarks>
-    public class HangfireStartupConfigurationTask : IRunBeforeStartupConfigurationTask
+    public class HangfireStartupConfigurationTask
+        : IRunBeforeStartupConfigurationTask
+        , IRunAfterStartupConfigurationTask
     {
         private readonly IHangfireBackgroundTaskInitializer _hangfireBackgroundTaskInitializer;
         private readonly IHangfireServerInitializer _hangfireServerInitializer;
@@ -27,17 +29,16 @@ namespace Cofoundry.Plugins.BackgroundTasks.Hangfire
             _hangfireServerInitializer = hangfireServerInitializer;
         }
 
-        public int Ordering
-        {
-            get { return (int)StartupTaskOrdering.Normal; }
-        }
+        public int Ordering { get; } = (int)StartupTaskOrdering.Normal;
 
         public ICollection<Type> RunBefore { get; } = new Type[] { typeof(MvcStartupConfigurationTask) };
+
+        public ICollection<Type> RunAfter { get; } = new Type[] { typeof(AutoUpdateMiddlewareStartupConfigurationTask) };
 
         public void Configure(IApplicationBuilder app)
         {
             _hangfireServerInitializer.Initialize(app);
-            _hangfireBackgroundTaskInitializer.Initialize();
+            app.UseMiddleware<HangfireInitializationMiddleware>();
         }
     }
 }
