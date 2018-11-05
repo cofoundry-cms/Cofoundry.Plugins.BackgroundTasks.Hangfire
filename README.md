@@ -25,8 +25,8 @@ Cofoundry does not include a background task runner by default so it is recommen
 
 ## Settings
 
-- **Cofoundry.Plugins.Hangfire.Disabled:** Prevents the HangFire server being configuted and started. Defaults to false.
-- **Cofoundry.Plugins.Hangfire.EnableHangfireDashboard:** Enables the HangFire dashboard for Cofoundry admin users at */admin/hangfire*. Defaults to false.
+- **Cofoundry:Plugins:Hangfire:Disabled** Prevents the HangFire server being configuted and started. Defaults to false.
+- **Cofoundry:Plugins:Hangfire:EnableHangfireDashboard** Enables the HangFire dashboard for Cofoundry admin users at */admin/hangfire*. Defaults to false.
 
 ## Customizing the HangFire Initialization Process
 
