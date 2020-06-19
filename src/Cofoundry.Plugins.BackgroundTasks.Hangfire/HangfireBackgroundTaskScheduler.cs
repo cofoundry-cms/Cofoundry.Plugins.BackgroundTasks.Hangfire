@@ -14,6 +14,8 @@ namespace Cofoundry.Plugins.BackgroundTasks.Hangfire
 
         public IBackgroundTaskScheduler RegisterRecurringTask<TTask>(int days, int atHour, int atMinute) where TTask : IRecurringBackgroundTask
         {
+            ValidateDailyTaskParameters(days, atHour, atMinute);
+
             string cronExpression = string.Format("{2} {1} */{0} * *", days, atHour, atMinute);
             RegisterRecurringTask<TTask>(cronExpression);
 
@@ -22,6 +24,13 @@ namespace Cofoundry.Plugins.BackgroundTasks.Hangfire
 
         public IBackgroundTaskScheduler RegisterRecurringTask<TTask>(int hours = 0, int minute = 0) where TTask : IRecurringBackgroundTask
         {
+            ValidateHourlyTaskParameters(hours, minute);
+
+            if (hours == 0 && minute > 0)
+            {
+                return RegisterRecurringTask<TTask>(minute);
+            }
+
             string cronExpression = string.Format("{1} */{0} * * *", hours, minute);
             RegisterRecurringTask<TTask>(cronExpression);
 
@@ -30,6 +39,15 @@ namespace Cofoundry.Plugins.BackgroundTasks.Hangfire
 
         public IBackgroundTaskScheduler RegisterRecurringTask<TTask>(int minutes) where TTask : IRecurringBackgroundTask
         {
+            ValidateMinuteTaskParameters(minutes);
+
+            if (minutes > 59)
+            {
+                var hours = minutes / 60;
+                minutes = minutes % 60;
+                return RegisterRecurringTask<TTask>(hours, minutes);
+            }
+
             string cronExpression = string.Format("*/{0} * * * *", minutes);
             RegisterRecurringTask<TTask>(cronExpression);
 
@@ -45,6 +63,8 @@ namespace Cofoundry.Plugins.BackgroundTasks.Hangfire
 
         public IBackgroundTaskScheduler RegisterAsyncRecurringTask<TTask>(int days, int atHour = 0, int atMinute = 0) where TTask : IAsyncRecurringBackgroundTask
         {
+            ValidateDailyTaskParameters(days, atHour, atMinute);
+
             string cronExpression = string.Format("{2} {1} */{0} * *", days, atHour, atMinute);
             RegisterAsyncRecurringTask<TTask>(cronExpression);
 
@@ -53,6 +73,13 @@ namespace Cofoundry.Plugins.BackgroundTasks.Hangfire
 
         public IBackgroundTaskScheduler RegisterAsyncRecurringTask<TTask>(int hours = 0, int minute = 0) where TTask : IAsyncRecurringBackgroundTask
         {
+            ValidateHourlyTaskParameters(hours, minute);
+
+            if (hours == 0 && minute > 0)
+            {
+                return RegisterAsyncRecurringTask<TTask>(minute);
+            }
+
             string cronExpression = string.Format("{1} */{0} * * *", hours, minute);
             RegisterAsyncRecurringTask<TTask>(cronExpression);
 
@@ -61,6 +88,15 @@ namespace Cofoundry.Plugins.BackgroundTasks.Hangfire
 
         public IBackgroundTaskScheduler RegisterAsyncRecurringTask<TTask>(int minutes) where TTask : IAsyncRecurringBackgroundTask
         {
+            ValidateMinuteTaskParameters(minutes);
+
+            if (minutes > 59)
+            {
+                var hours = minutes / 60;
+                minutes = minutes % 60;
+                return RegisterAsyncRecurringTask<TTask>(hours, minutes);
+            }
+
             string cronExpression = string.Format("*/{0} * * * *", minutes);
             RegisterAsyncRecurringTask<TTask>(cronExpression);
 
@@ -92,7 +128,48 @@ namespace Cofoundry.Plugins.BackgroundTasks.Hangfire
         {
             RecurringJob.AddOrUpdate<TTask>(GetJobId<TTask>(), t => t.ExecuteAsync(), cronExpression);
         }
-        
+
+        private void ValidateDailyTaskParameters(int days, int atHour, int atMinute)
+        {
+            ValidateNotNegative(days, nameof(days));
+            ValidateNotNegative(atHour, nameof(atHour));
+            ValidateNotNegative(atMinute, nameof(atMinute));
+
+            if (days == 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(days), "Daily recurring tasks need to have an interval of at least 1 day.");
+            }
+        }
+
+        private void ValidateHourlyTaskParameters(int hours, int minute)
+        {
+            ValidateNotNegative(hours, nameof(hours));
+            ValidateNotNegative(minute, nameof(minute));
+
+            if (hours == 0 && minute == 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(hours), "Recurring tasks need to have an interval of at least 1 minute.");
+            }
+
+        }
+
+        private void ValidateMinuteTaskParameters(int minutes)
+        {
+            ValidateNotNegative(minutes, nameof(minutes));
+            if (minutes == 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(minutes), "Recurring tasks need to have an interval of at least 1 minute.");
+            }
+        }
+
+        private void ValidateNotNegative(int number, string argumentName)
+        {
+            if (number < 0)
+            {
+                throw new ArgumentOutOfRangeException(argumentName, "Recurring tasks cannot set the interval to negative numbers.");
+            }
+        }
+
         #endregion
     }
 }

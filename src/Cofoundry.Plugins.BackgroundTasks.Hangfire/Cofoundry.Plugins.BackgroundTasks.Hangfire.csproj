@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
 
     <PackageId>Cofoundry.Plugins.BackgroundTasks.Hangfire</PackageId>
     <Description>Hangfire implementation of Cofoundry.Core.BackgroundTasks.</Description>
@@ -10,12 +10,12 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>bin\Release\netstandard1.6\Cofoundry.Plugins.BackgroundTasks.Hangfire.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\netcoreapp3.1\Cofoundry.Plugins.BackgroundTasks.Hangfire.xml</DocumentationFile>
     <NoWarn>1701;1702;1705;1591</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Cofoundry.Web" Version="0.6.0" />
-    <PackageReference Include="Hangfire" Version="1.6.21" />
+    <PackageReference Include="Cofoundry.Web" Version="0.6.2-feaure-360-netc-0028" />
+    <PackageReference Include="Hangfire" Version="1.7.11" />
   </ItemGroup>
 </Project>
