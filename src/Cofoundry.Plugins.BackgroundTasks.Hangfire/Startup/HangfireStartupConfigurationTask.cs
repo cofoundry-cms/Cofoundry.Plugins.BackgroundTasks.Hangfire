@@ -31,7 +31,7 @@ namespace Cofoundry.Plugins.BackgroundTasks.Hangfire
 
         public int Ordering { get; } = (int)StartupTaskOrdering.Normal;
 
-        public ICollection<Type> RunBefore { get; } = new Type[] { typeof(AddEndpointRoutesConfigurationTask) };
+        public ICollection<Type> RunBefore { get; } = new Type[] { typeof(AddEndpointRoutesStartupConfigurationTask) };
 
         public ICollection<Type> RunAfter { get; } = new Type[] { typeof(AutoUpdateMiddlewareStartupConfigurationTask) };
 
