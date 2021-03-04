@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Cofoundry.Web.Admin" Version="0.9.0" />
+    <PackageReference Include="Cofoundry.Web.Admin" Version="0.9.1" />
   </ItemGroup>
 
   <ItemGroup>
