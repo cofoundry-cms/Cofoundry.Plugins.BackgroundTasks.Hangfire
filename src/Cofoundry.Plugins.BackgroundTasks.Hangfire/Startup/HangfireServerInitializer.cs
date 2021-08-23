@@ -38,7 +38,7 @@ namespace Cofoundry.Plugins.BackgroundTasks.Hangfire
 
             if (_hangfireSettings.EnableHangfireDashboard && !_adminSettings.Disabled)
             {
-                var adminPath = FilePathHelper.CombineVirtualPath(_adminSettings.DirectoryName, "hangfire");
+                var adminPath = RelativePathHelper.Combine(_adminSettings.DirectoryName, "hangfire");
                 app.UseHangfireDashboard(adminPath, new DashboardOptions
                 {
                     Authorization = new IDashboardAuthorizationFilter[] { new HangfireDashboardAuthorizationFilter() },
