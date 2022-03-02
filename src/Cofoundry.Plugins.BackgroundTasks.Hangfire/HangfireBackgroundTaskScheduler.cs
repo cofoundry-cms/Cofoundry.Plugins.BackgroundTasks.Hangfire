@@ -1,17 +1,11 @@
-﻿using Hangfire;
+﻿using Cofoundry.Core.BackgroundTasks;
+using Hangfire;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Cofoundry.Core.BackgroundTasks;
 
 namespace Cofoundry.Plugins.BackgroundTasks.Hangfire
 {
     public class HangfireBackgroundTaskScheduler : IBackgroundTaskScheduler
     {
-        #region public methods
-
         public IBackgroundTaskScheduler RegisterRecurringTask<TTask>(int days, int atHour, int atMinute) where TTask : IRecurringBackgroundTask
         {
             ValidateDailyTaskParameters(days, atHour, atMinute);
@@ -110,10 +104,6 @@ namespace Cofoundry.Plugins.BackgroundTasks.Hangfire
             return this;
         }
 
-        #endregion
-
-        #region private methods
-
         private string GetJobId<TTask>()
         {
             return typeof(TTask).FullName;
@@ -151,6 +141,15 @@ namespace Cofoundry.Plugins.BackgroundTasks.Hangfire
                 throw new ArgumentOutOfRangeException(nameof(hours), "Recurring tasks need to have an interval of at least 1 minute.");
             }
 
+            if (hours > 23)
+            {
+                throw new ArgumentOutOfRangeException(nameof(hours), "Recurring tasks with an interval of 24 hours or more should be scheduled using a daily interval instead.");
+            }
+
+            if (minute > 59)
+            {
+                throw new ArgumentOutOfRangeException(nameof(hours), "Recurring tasks with an interval measured in hours and minutes cannot have an minute component greater than 59 minutes.");
+            }
         }
 
         private void ValidateMinuteTaskParameters(int minutes)
@@ -169,7 +168,5 @@ namespace Cofoundry.Plugins.BackgroundTasks.Hangfire
                 throw new ArgumentOutOfRangeException(argumentName, "Recurring tasks cannot set the interval to negative numbers.");
             }
         }
-
-        #endregion
     }
 }
