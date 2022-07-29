@@ -1,9 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
+	<ImplicitUsings>enable</ImplicitUsings>
 
-    <PackageId>Cofoundry.Plugins.BackgroundTasks.Hangfire</PackageId>
+	<PackageId>Cofoundry.Plugins.BackgroundTasks.Hangfire</PackageId>
     <Description>Hangfire implementation of Cofoundry.Core.BackgroundTasks.</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageTags>Cofoundry Hangfire Plugin BackgroundTasks</PackageTags>
@@ -15,7 +16,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Cofoundry.Web" Version="0.10.0" />
-    <PackageReference Include="Hangfire" Version="1.7.28" />
+    <PackageReference Include="Cofoundry.Web" Version="0.10.4-ci0006" />
+    <PackageReference Include="Hangfire" Version="1.7.30" />
   </ItemGroup>
 </Project>

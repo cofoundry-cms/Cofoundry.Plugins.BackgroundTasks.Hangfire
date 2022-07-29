@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26430.13
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cofoundry.Plugins.BackgroundTasks.Hangfire", "Cofoundry.Plugins.BackgroundTasks.Hangfire\Cofoundry.Plugins.BackgroundTasks.Hangfire.csproj", "{962BB845-1E06-4775-9C29-32E11B257603}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cofoundry.Plugins.BackgroundTasks.Hangfire", "src\Cofoundry.Plugins.BackgroundTasks.Hangfire\Cofoundry.Plugins.BackgroundTasks.Hangfire.csproj", "{962BB845-1E06-4775-9C29-32E11B257603}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{D4929788-4924-4E4A-927B-1E914C835AF1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HangfireSample", "HangfireSample\HangfireSample.csproj", "{0661510F-9EB5-4688-9934-DA72F90791A6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HangfireSample", "src\HangfireSample\HangfireSample.csproj", "{0661510F-9EB5-4688-9934-DA72F90791A6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
