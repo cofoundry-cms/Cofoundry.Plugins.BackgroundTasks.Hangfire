@@ -1,29 +1,22 @@
-﻿using Cofoundry.Domain;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿namespace HangfireSample;
 
-namespace HangfireSample
+public class ProductCustomEntityDefinition : ICustomEntityDefinition<ProductDataModel>
 {
-    public class ProductCustomEntityDefinition : ICustomEntityDefinition<ProductDataModel>
-    {
-        public const string DefinitionCode = "SPLPRD";
+    public const string DefinitionCode = "SPLPRD";
 
-        public string CustomEntityDefinitionCode => DefinitionCode;
+    public string CustomEntityDefinitionCode => DefinitionCode;
 
-        public string Name => "Product";
+    public string Name => "Product";
 
-        public string NamePlural => "Products";
+    public string NamePlural => "Products";
 
-        public string Description => "Example description";
+    public string Description => "Example description";
 
-        public bool ForceUrlSlugUniqueness => false;
+    public bool ForceUrlSlugUniqueness => false;
 
-        public bool HasLocale => false;
+    public bool HasLocale => false;
 
-        public bool AutoGenerateUrlSlug => true;
+    public bool AutoGenerateUrlSlug => true;
 
-        public bool AutoPublish => true;
-    }
+    public bool AutoPublish => true;
 }

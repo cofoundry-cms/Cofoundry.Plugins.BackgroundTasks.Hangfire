@@ -1,48 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Cofoundry.Core.BackgroundTasks;
+﻿using Cofoundry.Core.BackgroundTasks;
 
-namespace Cofoundry.Plugins.BackgroundTasks.Hangfire
+namespace Cofoundry.Plugins.BackgroundTasks.Hangfire;
+
+/// <summary>
+/// Used to bootstrap self-registering background tasks.
+/// </summary>
+public class HangfireBackgroundTaskInitializer : IHangfireBackgroundTaskInitializer
 {
-    /// <summary>
-    /// Used to bootstrap self-registering background tasks.
-    /// </summary>
-    public class HangfireBackgroundTaskInitializer : IHangfireBackgroundTaskInitializer
+    private readonly HangfireSettings _hangfireSettings;
+    private readonly IEnumerable<IBackgroundTaskRegistration> _backgroundTaskRegistrations;
+    private readonly IBackgroundTaskScheduler _backgroundTaskScheduler;
+
+    public HangfireBackgroundTaskInitializer(
+        HangfireSettings hangfireSettings,
+        IEnumerable<IBackgroundTaskRegistration> backgroundTaskRegistrations,
+        IBackgroundTaskScheduler backgroundTaskScheduler
+        )
     {
-        #region constructor
+        _hangfireSettings = hangfireSettings;
+        _backgroundTaskRegistrations = backgroundTaskRegistrations;
+        _backgroundTaskScheduler = backgroundTaskScheduler;
+    }
 
-        private readonly HangfireSettings _hangfireSettings;
-        private readonly IEnumerable<IBackgroundTaskRegistration> _backgroundTaskRegistrations;
-        private readonly IBackgroundTaskScheduler _backgroundTaskScheduler;
+    public void Initialize()
+    {
+        if (_hangfireSettings.Disabled) return;
 
-        public HangfireBackgroundTaskInitializer(
-            HangfireSettings hangfireSettings,
-            IEnumerable<IBackgroundTaskRegistration> backgroundTaskRegistrations,
-            IBackgroundTaskScheduler backgroundTaskScheduler
-            )
+        foreach (var registration in _backgroundTaskRegistrations)
         {
-            _hangfireSettings = hangfireSettings;
-            _backgroundTaskRegistrations = backgroundTaskRegistrations;
-            _backgroundTaskScheduler = backgroundTaskScheduler;
+            registration.Register(_backgroundTaskScheduler);
         }
-
-        #endregion
-
-        #region public methods
-
-        public void Initialize()
-        {
-            if (_hangfireSettings.Disabled) return;
-
-            foreach (var registration in _backgroundTaskRegistrations)
-            {
-                registration.Register(_backgroundTaskScheduler);
-            }
-        }
-
-        #endregion
     }
 }

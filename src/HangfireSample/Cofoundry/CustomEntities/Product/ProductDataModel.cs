@@ -1,15 +1,9 @@
-﻿using Cofoundry.Domain;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace HangfireSample
+namespace HangfireSample;
+
+public class ProductDataModel : ICustomEntityDataModel
 {
-    public class ProductDataModel : ICustomEntityDataModel
-    {
-        [Required]
-        public string Description { get; set; }
-    }
+    [Required]
+    public string Description { get; set; }
 }

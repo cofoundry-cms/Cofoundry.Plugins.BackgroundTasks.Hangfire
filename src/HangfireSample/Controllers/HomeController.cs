@@ -1,35 +1,29 @@
-﻿using Cofoundry.Domain;
-using Cofoundry.Domain.CQS;
+﻿using Cofoundry.Domain.CQS;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace HangfireSample.Controllers
+namespace HangfireSample.Controllers;
+
+public class HomeController : Controller
 {
-    public class HomeController : Controller
+    private readonly IQueryExecutor _queryExecutor;
+
+    public HomeController(
+        IQueryExecutor queryExecutor
+        )
     {
-        private readonly IQueryExecutor _queryExecutor;
+        _queryExecutor = queryExecutor;
+    }
 
-        public HomeController(
-            IQueryExecutor queryExecutor
-            )
+    [Route("")]
+    public async Task<IActionResult> Index()
+    {
+        var query = new SearchCustomEntityRenderSummariesQuery()
         {
-            _queryExecutor = queryExecutor;
-        }
+            CustomEntityDefinitionCode = ProductCustomEntityDefinition.DefinitionCode,
+            PageSize = 10
+        };
 
-        [Route("")]
-        public async Task<IActionResult> Index()
-        {
-            var query = new SearchCustomEntityRenderSummariesQuery()
-            {
-                CustomEntityDefinitionCode = ProductCustomEntityDefinition.DefinitionCode,
-                PageSize = 10
-            };
-
-            var result = await _queryExecutor.ExecuteAsync(query);
-            return View(result);
-        }
+        var result = await _queryExecutor.ExecuteAsync(query);
+        return View(result);
     }
 }
