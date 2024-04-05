@@ -1,9 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace HangfireSample;
 
 public class ProductDataModel : ICustomEntityDataModel
 {
     [Required]
-    public string Description { get; set; }
+    public string Description { get; set; } = string.Empty;
 }

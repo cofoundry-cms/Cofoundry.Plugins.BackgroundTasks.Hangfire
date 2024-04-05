@@ -1,12 +1,12 @@
-﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Cofoundry.Plugins.BackgroundTasks.Hangfire;
 
 public class HangfireInitializationMiddleware
 {
-    private static bool isInitialized = false;
-    private static object _isInitializedLock = new object();
+    private static bool _isInitialized;
+    private static readonly object _isInitializedLock = new();
     private readonly RequestDelegate _next;
 
     public HangfireInitializationMiddleware(
@@ -18,15 +18,15 @@ public class HangfireInitializationMiddleware
 
     public async Task Invoke(HttpContext cx)
     {
-        bool runInitialize = false;
+        var runInitialize = false;
 
-        if (!isInitialized)
+        if (!_isInitialized)
         {
             lock (_isInitializedLock)
             {
-                if (!isInitialized)
+                if (!_isInitialized)
                 {
-                    isInitialized = true;
+                    _isInitialized = true;
                     runInitialize = true;
                 }
             }
@@ -35,12 +35,12 @@ public class HangfireInitializationMiddleware
             {
                 try
                 {
-                    var initializer = cx.RequestServices.GetService<IHangfireBackgroundTaskInitializer>();
+                    var initializer = cx.RequestServices.GetRequiredService<IHangfireBackgroundTaskInitializer>();
                     initializer.Initialize();
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-                    isInitialized = false;
+                    _isInitialized = false;
                     throw;
                 }
             }

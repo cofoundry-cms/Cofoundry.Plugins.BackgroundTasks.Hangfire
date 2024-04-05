@@ -1,4 +1,4 @@
-﻿using Cofoundry.Web;
+using Cofoundry.Web;
 using Microsoft.AspNetCore.Builder;
 
 namespace Cofoundry.Plugins.BackgroundTasks.Hangfire;
@@ -25,9 +25,9 @@ public class HangfireStartupConfigurationTask
 
     public int Ordering { get; } = (int)StartupTaskOrdering.Normal;
 
-    public ICollection<Type> RunBefore { get; } = new Type[] { typeof(AddEndpointRoutesStartupConfigurationTask) };
+    public IReadOnlyCollection<Type> RunBefore { get; } = [typeof(AddEndpointRoutesStartupConfigurationTask)];
 
-    public ICollection<Type> RunAfter { get; } = new Type[] { typeof(AutoUpdateMiddlewareStartupConfigurationTask) };
+    public IReadOnlyCollection<Type> RunAfter { get; } = [typeof(AutoUpdateMiddlewareStartupConfigurationTask)];
 
     public void Configure(IApplicationBuilder app)
     {

@@ -1,4 +1,4 @@
-﻿using Cofoundry.Core;
+using Cofoundry.Core;
 using Cofoundry.Domain;
 using Hangfire;
 using Hangfire.Dashboard;
@@ -27,9 +27,10 @@ public class HangfireServerInitializer : IHangfireServerInitializer
     public void Initialize(IApplicationBuilder app)
     {
         // Allow hangfire to be disabled, e.g. when connecting from dev to a production db.
-        if (_hangfireSettings.Disabled) return;
-
-        app.UseHangfireServer();
+        if (_hangfireSettings.Disabled)
+        {
+            return;
+        }
 
         if (_hangfireSettings.EnableHangfireDashboard && !_adminSettings.Disabled)
         {

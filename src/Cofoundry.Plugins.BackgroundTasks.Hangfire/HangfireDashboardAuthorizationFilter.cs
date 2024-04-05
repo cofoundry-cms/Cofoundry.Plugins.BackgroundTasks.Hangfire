@@ -1,6 +1,7 @@
-﻿using Cofoundry.Domain;
+using Cofoundry.Domain;
 using Hangfire.Annotations;
 using Hangfire.Dashboard;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Cofoundry.Plugins.BackgroundTasks.Hangfire;
 
@@ -8,12 +9,12 @@ public class HangfireDashboardAuthorizationFilter : IDashboardAuthorizationFilte
 {
     public bool Authorize([NotNull] DashboardContext context)
     {
-        var service = (IUserContextService)context.GetHttpContext().RequestServices.GetService(typeof(IUserContextService));
+        var service = context.GetHttpContext().RequestServices.GetRequiredService<IUserContextService>();
 
         // Hangfire does not support async auth:
         // https://github.com/HangfireIO/Hangfire/issues/827
         var userContext = service
-            .GetCurrentContextByUserAreaAsync(CofoundryAdminUserArea.AreaCode)
+            .GetCurrentContextByUserAreaAsync(CofoundryAdminUserArea.Code)
             .ConfigureAwait(false).GetAwaiter().GetResult();
 
         return userContext.IsCofoundryUser();

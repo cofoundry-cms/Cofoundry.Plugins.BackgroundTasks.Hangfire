@@ -1,4 +1,4 @@
-﻿using Cofoundry.Core.BackgroundTasks;
+using Cofoundry.Core.BackgroundTasks;
 using Hangfire;
 
 namespace Cofoundry.Plugins.BackgroundTasks.Hangfire;
@@ -9,7 +9,7 @@ public class HangfireBackgroundTaskScheduler : IBackgroundTaskScheduler
     {
         ValidateDailyTaskParameters(days, atHour, atMinute);
 
-        string cronExpression = string.Format("{2} {1} */{0} * *", days, atHour, atMinute);
+        var cronExpression = $"{atMinute} {atHour} */{days} * *";
         RegisterRecurringTask<TTask>(cronExpression);
 
         return this;
@@ -24,7 +24,7 @@ public class HangfireBackgroundTaskScheduler : IBackgroundTaskScheduler
             return RegisterRecurringTask<TTask>(minute);
         }
 
-        string cronExpression = string.Format("{1} */{0} * * *", hours, minute);
+        var cronExpression = $"{minute} */{hours} * * *";
         RegisterRecurringTask<TTask>(cronExpression);
 
         return this;
@@ -41,7 +41,7 @@ public class HangfireBackgroundTaskScheduler : IBackgroundTaskScheduler
             return RegisterRecurringTask<TTask>(hours, minutes);
         }
 
-        string cronExpression = string.Format("*/{0} * * * *", minutes);
+        var cronExpression = $"*/{minutes} * * * *";
         RegisterRecurringTask<TTask>(cronExpression);
 
         return this;
@@ -58,7 +58,7 @@ public class HangfireBackgroundTaskScheduler : IBackgroundTaskScheduler
     {
         ValidateDailyTaskParameters(days, atHour, atMinute);
 
-        string cronExpression = string.Format("{2} {1} */{0} * *", days, atHour, atMinute);
+        var cronExpression = $"{atMinute} {atHour} */{days} * *";
         RegisterAsyncRecurringTask<TTask>(cronExpression);
 
         return this;
@@ -73,7 +73,7 @@ public class HangfireBackgroundTaskScheduler : IBackgroundTaskScheduler
             return RegisterAsyncRecurringTask<TTask>(minute);
         }
 
-        string cronExpression = string.Format("{1} */{0} * * *", hours, minute);
+        var cronExpression = $"{minute} */{hours} * * *";
         RegisterAsyncRecurringTask<TTask>(cronExpression);
 
         return this;
@@ -90,7 +90,7 @@ public class HangfireBackgroundTaskScheduler : IBackgroundTaskScheduler
             return RegisterAsyncRecurringTask<TTask>(hours, minutes);
         }
 
-        string cronExpression = string.Format("*/{0} * * * *", minutes);
+        var cronExpression = $"*/{minutes} * * * *";
         RegisterAsyncRecurringTask<TTask>(cronExpression);
 
         return this;
@@ -103,22 +103,28 @@ public class HangfireBackgroundTaskScheduler : IBackgroundTaskScheduler
         return this;
     }
 
-    private string GetJobId<TTask>()
+    private static string GetJobId<TTask>()
     {
-        return typeof(TTask).FullName;
+        var typeName = typeof(TTask).FullName;
+        if (typeName == null)
+        {
+            throw new InvalidOperationException("Job type does not have a type name.");
+        }
+
+        return typeName;
     }
 
-    private void RegisterRecurringTask<TTask>(string cronExpression) where TTask : IRecurringBackgroundTask
+    private static void RegisterRecurringTask<TTask>(string cronExpression) where TTask : IRecurringBackgroundTask
     {
         RecurringJob.AddOrUpdate<TTask>(GetJobId<TTask>(), t => t.Execute(), cronExpression);
     }
 
-    private void RegisterAsyncRecurringTask<TTask>(string cronExpression) where TTask : IAsyncRecurringBackgroundTask
+    private static void RegisterAsyncRecurringTask<TTask>(string cronExpression) where TTask : IAsyncRecurringBackgroundTask
     {
         RecurringJob.AddOrUpdate<TTask>(GetJobId<TTask>(), t => t.ExecuteAsync(), cronExpression);
     }
 
-    private void ValidateDailyTaskParameters(int days, int atHour, int atMinute)
+    private static void ValidateDailyTaskParameters(int days, int atHour, int atMinute)
     {
         ValidateNotNegative(days, nameof(days));
         ValidateNotNegative(atHour, nameof(atHour));
@@ -130,7 +136,7 @@ public class HangfireBackgroundTaskScheduler : IBackgroundTaskScheduler
         }
     }
 
-    private void ValidateHourlyTaskParameters(int hours, int minute)
+    private static void ValidateHourlyTaskParameters(int hours, int minute)
     {
         ValidateNotNegative(hours, nameof(hours));
         ValidateNotNegative(minute, nameof(minute));
@@ -151,7 +157,7 @@ public class HangfireBackgroundTaskScheduler : IBackgroundTaskScheduler
         }
     }
 
-    private void ValidateMinuteTaskParameters(int minutes)
+    private static void ValidateMinuteTaskParameters(int minutes)
     {
         ValidateNotNegative(minutes, nameof(minutes));
         if (minutes == 0)
@@ -160,7 +166,7 @@ public class HangfireBackgroundTaskScheduler : IBackgroundTaskScheduler
         }
     }
 
-    private void ValidateNotNegative(int number, string argumentName)
+    private static void ValidateNotNegative(int number, string argumentName)
     {
         if (number < 0)
         {

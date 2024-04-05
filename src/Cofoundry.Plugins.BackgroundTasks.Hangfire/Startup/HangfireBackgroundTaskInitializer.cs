@@ -24,7 +24,10 @@ public class HangfireBackgroundTaskInitializer : IHangfireBackgroundTaskInitiali
 
     public void Initialize()
     {
-        if (_hangfireSettings.Disabled) return;
+        if (_hangfireSettings.Disabled)
+        {
+            return;
+        }
 
         foreach (var registration in _backgroundTaskRegistrations)
         {

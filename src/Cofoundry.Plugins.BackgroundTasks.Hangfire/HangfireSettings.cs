@@ -1,4 +1,4 @@
-﻿using Cofoundry.Core.Configuration;
+using Cofoundry.Core.Configuration;
 
 namespace Cofoundry.Plugins.BackgroundTasks.Hangfire;
 

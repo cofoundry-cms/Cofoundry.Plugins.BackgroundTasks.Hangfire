@@ -1,8 +1,7 @@
-﻿using Cofoundry.Core;
+using Cofoundry.Core;
 using Cofoundry.Core.AutoUpdate;
 using Cofoundry.Web;
 using Hangfire;
-using Hangfire.SqlServer;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Cofoundry.Plugins.BackgroundTasks.Hangfire;
@@ -34,11 +33,13 @@ public class HangfireStartupServiceConfigurationTask : IStartupServiceConfigurat
         mvcBuilder
             .Services
             .AddHangfire(configuration => configuration
-                .UseSqlServerStorage(connectionString, new SqlServerStorageOptions()
+                .UseSqlServerStorage(connectionString, new()
                 {
-                    PrepareSchemaIfNecessary = !isDbLocked
+                    PrepareSchemaIfNecessary = !isDbLocked,
+                    EnableHeavyMigrations = true
                 })
                 .UseFilter(new AutomaticRetryAttribute { Attempts = 0 })
-                );
+            )
+            .AddHangfireServer();
     }
 }
